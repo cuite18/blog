@@ -22,8 +22,8 @@
     <body>
 
         <header>
-            <nav class="navbar navbar-expand-lg navbar-light bg-light">
-                <a class="navbar-brand" href="#">Navbar</a>
+            <nav class="navbar navbar-expand-lg navbar-light bg-secondary">
+                <a class="navbar-brand" href="{{ path('home') }}">Blog</a>
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
@@ -31,26 +31,29 @@
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                     <ul class="navbar-nav mr-auto">
                         <li class="nav-item active">
-                            <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
+                            {# La fonction path() Twig permet de définir la route et le chemin du lien <a>, il faut lui fournir le nom  de la route (@Route('', name='home')) #}
+                            <a class="nav-link" href="{{ path('home') }}">Acceuil</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="#">Link</a>
+                            <a class="nav-link" href="{{ path('blog') }}">Articles</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">Nouvelle Article</a>
                         </li>
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            Dropdown
+                            Categories
                             </a>
                             <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                                <a class="dropdown-item" href="#">Action</a>
-                                <a class="dropdown-item" href="#">Another action</a>
-                            <div class="dropdown-divider"></div>
-                                <a class="dropdown-item" href="#">Something else here</a>
+                                <a class="dropdown-item" href="#">Arts</a>
+                                <a class="dropdown-item" href="#">Cinéma</a>
+                                <a class="dropdown-item" href="#">Sport</a>
                             </div>
                         </li>
                     </ul>
                     <form class="form-inline my-2 my-lg-0">
                         <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
-                        <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+                        <button class="btn btn-outline-dark my-2 my-sm-0" type="submit">Search</button>
                     </form>
                 </div>
             </nav>
@@ -66,8 +69,9 @@
         </main>
 
 
-        <footer class="text-center py-4">
+        <footer class="text-center py-4 bg-secondary">
         
+            &copy; Copyright - Hayme Roger-Damien - pas touche mon site ma Moula
         
         </Footer>
 
