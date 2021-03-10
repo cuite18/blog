@@ -1,4 +1,16 @@
-<h1>{{title}}</h1>
+{% extends "base.html.twig" %}
+
+{# on hérite de notre gabarit de base base.html.twig (header, nav, footer, liens css etc...) #}
+{# extends : commande Twig  #}
+
+{# block : commande Twig #}
+{# Le block 'body' fait appel au bloc 'body' définit dans base.html.twig qui permet d'intégrer le contenu du template donc le block 'body' de base.html.twig (entre la nav et le footer)  #}
+
+
+{% block body %}
+
+
+<h1 class="display-4">{{title}}</h1>
 {# Twig est un langage de rendu, un moteur de template, qui permet de traiter et d'afficher les données transmit par le controller sur les différents template #}
 {# Twig est intégrer automatiquement au framework Symfony #}
 {# title : variable TWIG qui est transmit par le controller, par la méthode home() #}
@@ -24,3 +36,6 @@
 Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin ut rhoncus nisi. Fusce lectus nisi, ullamcorper ac ultrices id, placerat vitae velit. Phasellus mollis turpis sed lectus rhoncus maximus. Mauris tincidunt non neque vulputate viverra. Morbi pulvinar ex ac ex vestibulum pharetra. Morbi tincidunt risus in faucibus consectetur. Vestibulum tincidunt massa et felis eleifend, eu consectetur dui dictum. Maecenas tincidunt leo vel rhoncus elementum. Etiam arcu mi, dignissim sed ultrices vel, tincidunt sit amet nunc. Integer id mattis leo, sit amet accumsan lorem. Vestibulum lobortis non sapien non sodales. Aenean hendrerit ligula eu urna feugiat, at convallis odio consectetur. Duis eu scelerisque dui. Praesent in diam vel erat pharetra malesuada a sit amet dui. Aenean varius faucibus arcu, sed hendrerit erat.<hr>
 
 Sed pharetra nisl id libero hendrerit, ut aliquet ligula maximus. Ut non efficitur enim. Cras fermentum, sem at pharetra viverra, massa erat hendrerit velit, nec sagittis arcu enim sed urna. Quisque est augue, mattis at efficitur a, euismod finibus nunc. Phasellus condimentum elit posuere venenatis vulputate. Phasellus lobortis dui urna, malesuada pharetra arcu venenatis a. Duis quis odio scelerisque, varius urna ac, volutpat libero. Quisque felis dui, porttitor vitae rhoncus eu, egestas sed augue. Vivamus elementum nibh luctus neque pulvinar scelerisque. Phasellus ornare vehicula felis vitae congue. Ut ornare, felis ac iaculis vestibulum, nunc nunc ullamcorper purus, ut dictum dui magna id felis. Nulla tristique sit amet metus ac vulputate. Proin dapibus aliquet ipsum et mattis. Praesent euismod odio augue, ac elementum orci volutpat vitae.
+
+{% endblock %}
+
