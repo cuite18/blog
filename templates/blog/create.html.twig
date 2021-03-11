@@ -7,9 +7,20 @@
 {% block body %}
 
 
-<h1 class="display-4 text-center my-5">Creation d'un Nouvelle articles</h1>
+<h1 class="display-4 text-center my-5">
+{% if editMode %}
+{# Si la variable editMode renvoie TRUE, cela veut dire que l'id de l'article est définit, c'est une modification #}
+    Modification de l'article n°{{ editMode }}
+{% else %}
+{# Sinon, l'id n'est pas définit, c'est une insertion #}
+    creation d'un Nouvel article
+{% endif %}
 
-<form class="col-md-6 mx-auto" method="post">
+</h1>
+
+
+{# 
+<form class="col-md-5 mx-auto" method="post">
     <div class="form-group">
         <label for="title">Titre</label>
         <input type="text" class="form-control" id="title" name="title">
@@ -23,8 +34,47 @@
         <input type="text" class="form-control" id="image" name="image">
     </div>
     <button type="submit" class="btn btn-primary mb-2">Enregistrer</button>
-</form>
+</form> #}
 
+{# form() : fonction Twwig qui permet d'afficher le rendu du formulaire transmit par le controller 'formArticle' #}
+
+{# {{ form(formArticle) }} #}
+
+{# form_start() : fonction Twig ouvre la balise <form> #}
+{{ form_start(formArticle, {'attr': {'class': 'col-md-6 mx-auto'} }) }}
+
+    {{ form_row(formArticle.title, {
+        'attr': {'placeholder': "Saisir le titre", "maxlength": false, "pattern": false},
+         'label': "Titre de l'article"
+         })
+    }}
+
+    {{ form_row(formArticle.content, {
+        'attr': {'placeholder': "Saisir le contenu",
+        'rows': 15
+        },
+         'label': "Contenu de l'article"
+         })
+    }}
+
+    {{ form_row(formArticle.image, {
+        'attr': {'placeholder': "URL de l'image"},
+         'label': "Titre de l'article"
+         })
+    }}
+
+    <button type="submit" class="btn btn-sm btn-success">
+
+    {% if editMode %}
+        Enregistrer la modification
+    {% else %}
+        enregistrer l'article
+    {% endif %}
+    
+    </button>
+
+{{ form_end(formArticle) }}
+{# form_start() : fonction Twig ferme la balise <form> #}
 
 
 

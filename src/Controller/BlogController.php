@@ -3,12 +3,16 @@
 namespace App\Controller;
 
 use App\Entity\Article;
+use App\Form\ArticleFormType;
+use Doctrine\ORM\EntityManager;
 use App\Repository\ArticleRepository;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-
 
 class BlogController extends AbstractController
 {
@@ -65,15 +69,103 @@ class BlogController extends AbstractController
      * méthode permettant d'inseret et de Modifier un arcticle
      * 
      * @Route("/blog/new", name="blog_create")
+     * @Route("/blog/{id}/edit", name="blog_edit")
      */
-    public function create(Request $request): Response
+    public function create(Article $articleCreate = null, Request $request, EntityManagerInterface $manager): Response
     {
         // la classe Request de Symfony permet de véhiculer les données des superglobales PHP ($_POST, $_FILES, $_COOKIE, $_SESSION)
         // $request est un objet issu de la classe Request injecté en dependance de la méthode create()
 
         dump($request);
 
-        return $this->render('blog/create.html.twig');
+        // $request permet de stocker les donnée des superglobales la proprietés $request->request permet de stocker les donnée véhiculer par un formulaire ($_POST), ici on compte si il y a donnée qui ont été saisie dans le formulaire
+        // if($request->request->count() > 0)
+        // {
+        //     // Pour inserer dans la table Article nous devons instancier un objet issu de la classe entité Article qui est lié a la table SQL Article
+        //     $articleCreate = new Article;
+
+        //     // On rensigne tout les setteurs de l'objet avec en arguments les données du formulaire ($_POST)
+        //     $articleCreate->setTitle($request->request->get('title'))
+        //                   ->setContent($request->request->get('content'))
+        //                   ->setImage($request->request->get('image'))
+        //                   ->setCreatedAt(new \DateTime);
+
+        //     dump($articleCreate);// on observe que l'objet entité Article $articleCreate, les propriétés contiennent bien les données du formaulaire
+
+        //     // On fait appel au manager afin de pouvoir executer une insertion en BDD
+        //     $manager->persist($articleCreate); // on prépare et garde en mémoire l'insertion
+        //     $manager->flush(); // on execute l'insertion
+
+        //     // Après l'insertion, on redirige l'internaute vers le détail de l'article qui vient d'être inséré en BDD
+        //     // Cela correspond à la route 'blog_show', mais c'est une route paramétrée qui attend un ID dans l'URL
+        //     // En 2ème argument de redirectToRoute, nous transmettons l'ID de l'article qui vient d'être inséré en BDD
+        //     return $this->redirectToRoute('blog_show', [
+        //         'id' =>$articleCreate->getId()
+        //     ]);
+        // }
+
+
+        
+
+        //createFormBuilder() méthode de symfony qui permet de generee un formulaire de remplir une entité $articleCreate
+        // $form = $this->createFormBuilder($articleCreate)
+        //              ->add('title') // add() méthode qui permet de généré des champ de formulaire
+
+        //              ->add('content')
+
+        //              ->add('image')
+
+        //              ->getForm(); //permet de valider le formulaire //permet d'afficher le rendu final
+
+
+        // Si la variable $articleCreate N'EST PAS, si elle ne contient aucun article de la BDD, cela veut dire nous avons envoyé la route '/blog/new', c'est une insertion, on entre dans le IF et on crée une nouvelle instance de l'entité Article, création d'un nouvel article
+        // Si la variable $articleCreate contient un article de la BDD, cela veut dire que nous avons envoyé la route '/blog/id/edit', c'est une modifiction d'article, on entre pas dans le IF
+        if(!$articleCreate)
+        {
+            $articleCreate = new Article; // setTitle($_POST['title'])
+        }
+
+        
+
+        // Ici nous renseignons le setter de l'objet et Symfony est capable automatiquement d'envoyer les valeurs de l'entité directement dans les attributs 'value' du formulaire, étant donné que l'entité $articleCreate est relié au formulaire
+        // $articleCreate->setTitle("titre a la con")
+        //               ->setContent("contenu a la con");
+
+
+        // Nous avons créer une classe qui permet de générer le formulaire d'ajout d'article, il faut dans le controller importer cette classe ArticleFormType et relier le formulaire à notre entité Article $articleCreate
+        $form = $this->createForm(ArticleFormType::class, $articleCreate);
+
+        
+        // On pioche dans l'objet du formulaire la methode handleRequest() qui permet de recuperer chaque données saisie dans le formulaire ($request) et de les bindé, de les transmettre directement dans les bons setteur de mon entité $articleCreate
+        // $_POST['title'] --> setTitle($_POST['title']);
+        $form->handleRequest($request);
+
+        //dump($articleCreate);
+
+        if($form->isSubmitted() && $form->isValid())
+        {
+            
+
+            if(!$articleCreate->getId())
+            {
+                // On appel le setter de la date ,puisque nous avons pas de champs date dans le formulaire
+                $articleCreate->setCreatedAt(new \DateTime);
+            }
+
+            $manager->persist($articleCreate); // On appel le manager pour préparer la requet d'insertion et la garder en mémoire
+            
+            $manager->flush();// On execute la resuette d'insertion en BDD
+
+            return $this->redirectToRoute('blog_show', [
+                'id' => $articleCreate->getId()
+            ]);
+        }
+
+        return $this->render('blog/create.html.twig', [
+            'formArticle' => $form->createView(), // on transet sur le template le formulaire createView() retourne un petit objet qui represent l'affichage du formulaire on le recupère sur le template create.html.twig
+
+            'editMode' => $articleCreate->getId()
+        ]);
     }
 
     /**

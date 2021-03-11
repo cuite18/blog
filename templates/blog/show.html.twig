@@ -8,24 +8,24 @@
 
     <h1 class="display-4 text-center my-5">{{ articleTwig.title }}</h1>
 
-    <div class="album py-5 bg-warning">
     
-        <div class="row">
+    
+    <div class="row">
 
-            <div class="col-md-8 mx-auto">
+        <div class="col-md-8 mx-auto">
 
-                <div class="card mb-4 shadow-sm">
-                    
-                    <img src="{{ articleTwig.image|replace({'200/300': '1000/300'}) }}" alt="{{ articleTwig.title }}" class="">
+            <div class="card mb-4 shadow-sm">
+                
+                <img src="{{ articleTwig.image|replace({'200/300': '1000/300'}) }}" alt="{{ articleTwig.title }}" class="">
 
-                    <div class="card-body">
-                    <p class="card-text">{{ articleTwig.content|striptags }}</p>
-                    <div class="d-flex justify-content-between align-items-center">
-                        <small class="text-muted">{{ articleTwig.createdAt|date('d/m/y') }} à {{ articleTwig.createdAt|date('H:i:s') }}</small>
-                    </div>
+                <div class="card-body">
+                <p class="card-text">{{ articleTwig.content|striptags }}</p>
+                <div class="d-flex justify-content-between align-items-center">
+                    <small class="text-muted">{{ articleTwig.createdAt|date('d/m/y') }} à {{ articleTwig.createdAt|date('H:i:s') }}</small>
                 </div>
             </div>
         </div>
     </div>
+
 
 {% endblock %}
