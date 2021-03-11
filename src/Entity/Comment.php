@@ -2,14 +2,13 @@
 
 namespace App\Entity;
 
-use App\Repository\ArticleRepository;
-use Symfony\Component\Validator\Constraints as Assert;
+use App\Repository\CommentRepository;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * @ORM\Entity(repositoryClass=ArticleRepository::class)
+ * @ORM\Entity(repositoryClass=CommentRepository::class)
  */
-class Article
+class Comment
 {
     /**
      * @ORM\Id
@@ -20,14 +19,8 @@ class Article
 
     /**
      * @ORM\Column(type="string", length=255)
-     *  @Assert\Length(
-     *      min = 2,
-     *      max = 50,
-     *      minMessage = "Le titre est trop court",
-     *      maxMessage = "Le titre est trop long"
-     * )
      */
-    private $title;
+    private $author;
 
     /**
      * @ORM\Column(type="text")
@@ -35,34 +28,29 @@ class Article
     private $content;
 
     /**
-     * @ORM\Column(type="string", length=255)
-     */
-    private $image;
-
-    /**
      * @ORM\Column(type="datetime")
      */
     private $createdAt;
 
     /**
-     * @ORM\ManyToOne(targetEntity=Category::class, inversedBy="articles")
+     * @ORM\ManyToOne(targetEntity=Article::class, inversedBy="comments")
      * @ORM\JoinColumn(nullable=false)
      */
-    private $category;
+    private $article;
 
     public function getId(): ?int
     {
         return $this->id;
     }
 
-    public function getTitle(): ?string
+    public function getAuthor(): ?string
     {
-        return $this->title;
+        return $this->author;
     }
 
-    public function setTitle(string $title): self
+    public function setAuthor(string $author): self
     {
-        $this->title = $title;
+        $this->author = $author;
 
         return $this;
     }
@@ -79,18 +67,6 @@ class Article
         return $this;
     }
 
-    public function getImage(): ?string
-    {
-        return $this->image;
-    }
-
-    public function setImage(string $image): self
-    {
-        $this->image = $image;
-
-        return $this;
-    }
-
     public function getCreatedAt(): ?\DateTimeInterface
     {
         return $this->createdAt;
@@ -103,14 +79,14 @@ class Article
         return $this;
     }
 
-    public function getCategory(): ?Category
+    public function getArticle(): ?Article
     {
-        return $this->category;
+        return $this->article;
     }
 
-    public function setCategory(?Category $category): self
+    public function setArticle(?Article $article): self
     {
-        $this->category = $category;
+        $this->article = $article;
 
         return $this;
     }
