@@ -49,6 +49,8 @@
          })
     }}
 
+    {{ form_row(formArticle.category, {'label': "Choisir une catégorie"}) }}
+
     {{ form_row(formArticle.content, {
         'attr': {'placeholder': "Saisir le contenu",
         'rows': 15
@@ -63,7 +65,7 @@
          })
     }}
 
-    <button type="submit" class="btn btn-sm btn-success">
+    <button type="submit" class="btn btn-sm btn-secondary mb-2">
 
     {% if editMode %}
         Enregistrer la modification

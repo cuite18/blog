@@ -3,7 +3,9 @@
 namespace App\Controller;
 
 use App\Entity\Article;
+use App\Entity\Comment;
 use App\Form\ArticleFormType;
+use App\Form\CommentFormType;
 use Doctrine\ORM\EntityManager;
 use App\Repository\ArticleRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -175,12 +177,50 @@ class BlogController extends AbstractController
      * /blog/9-->{id} --> $id = 9
      * @Route("/blog/{id}", name="blog_show")
      */
-    public function show(Article $article): Response
+    public function show(Article $article, request $request, EntityManagerInterface $manager): Response
     {
         // $repoArticle est un objet issue de la classe articleRepository
         //$repoArticle = $this->getDoctrine()->getRepository(Article::class);
 
-        //dump($repoArticle);
+        $comment = new Comment;
+
+        $formComment = $this->createForm(CommentFormType::class, $comment);
+
+        dump($request);
+
+        $formComment->handleRequest($request);
+
+        if($formComment->isSubmitted() && $formComment->isValid())
+        {
+
+            $comment->setCreatedAt(new \DateTime)
+                        ->setArticle($article);
+
+            $manager->persist($comment); // On appel le manager pour préparer la requet d'insertion et la garder en mémoire
+            
+            $manager->flush();// On execute la resuette d'insertion en BDD
+
+            //envoi d'un message de validation en session grace  a la methode addFlash
+            // 1 success : identifient du message
+            // 2 le message 
+            $this->addFlash('success',"Le commentaire a bien été postée");
+
+
+            return $this->redirectToRoute('blog_show', [
+                'id' => $article->getId()
+            ]);
+
+
+        }
+
+        
+        //dump($article);
+
+
+        return $this->render('blog/show.html.twig', [
+            'articleTwig' => $article, // on envoi sur le template les données selectionnées en BDD, c'est à dire les informations d'1 article en fonction l'id transmit dans l'URL
+            'formComment' => $formComment->createView()
+        ]);
 
         //dump($id); // id 9
 
@@ -188,9 +228,7 @@ class BlogController extends AbstractController
         // La méthode find() permet de selectionner en BDD un article par son ID
         //$article = $repoArticle->find($id);
 
-        return $this->render('blog/show.html.twig', [
-            'articleTwig' => $article // on envoi sur le template les données selectionnées en BDD, c'est à dire les informations d'1 article en fonction l'id transmit dans l'URL
-        ]);
+        
     }
 
     /*
