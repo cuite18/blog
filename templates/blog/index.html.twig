@@ -20,7 +20,7 @@
 
             <h4 class="text-center">{{ data.title }}</h4><hr>
 
-            <p class="text-center card-text">{{ data.content|striptags }}</p>
+            <p class="text-center card-text">{{ data.content|striptags|slice(0,250) }}...</p>
 
             <div class="d-flex justify-content-between align-items-center">
               <div class="btn-group">
@@ -29,7 +29,12 @@
               </div>
               {# La bdd renvoi un objet issue de la classe DateTime, on ne peut la convertir en une chaine de caractère #}
                                 {# On utilise donc un filtre Twig : date() #}
-              <small class="text-muted">{{ data.createdAt|date('d/m/y') }} à {{ data.createdAt|date('H:i:s') }}</small>
+              <small class="text-center text-muted"><strong>Postée le </strong>{{ data.createdAt|date('d/m/y') }} à {{ data.createdAt|date('H:i:s') }} dans la catégorie <strong>{{ data.category.title }}</strong></small>
+              {# 
+                Nous avons une relation entre la table Article et la table Category
+                Grace aux relations bi-directionnelle, en selectionnant dans la table Article, nous avons automatiquement accès à toute les correspondance dans les autres tables
+                Ici si nous selectionnons les articles, nous avons automatiquement accès à la catégorie associée à l'article ainsi que tout les commentaires liés à l'article
+               #}
             </div>
 
           </div>

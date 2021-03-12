@@ -8,6 +8,13 @@
 
     <h1 class="display-4 text-center my-5">{{ articleTwig.title }}</h1>
 
+    {% for message in app.flashes('success') %}
+
+        <div class="col-md-5 bg-success p-4 rounded mx-auto text-center text-white mb-3">
+        {{ message }}
+        </div>
+
+    {% endfor %}
     
     
     <div class="row">
@@ -19,12 +26,71 @@
                 <img src="{{ articleTwig.image|replace({'200/300': '1000/300'}) }}" alt="{{ articleTwig.title }}" class="">
 
                 <div class="card-body">
-                <p class="card-text">{{ articleTwig.content|striptags }}</p>
+                {# raw : fitre twig qui masque les balise html prevenant de la BDD #}
+                <p class="card-text">{{ articleTwig.content|raw }}</p>
                 <div class="d-flex justify-content-between align-items-center">
-                    <small class="text-muted">{{ articleTwig.createdAt|date('d/m/y') }} à {{ articleTwig.createdAt|date('H:i:s') }}</small>
+                    <small class="text-text-muted"><strong>Postée le </strong>{{ articleTwig.createdAt|date('d/m/y') }} à {{ articleTwig.createdAt|date('H:i:s') }} dans la catégorie <strong>{{ articleTwig.Category.title }}</strong></small>
                 </div>
             </div>
+
         </div>
+
+
+
+        <h4 class="my-5">Vos réactions...</h4>
+
+        {{ form_start(formComment, {'attr': {'class': 'mx-auto'} }) }}
+
+        {{ form_row(formComment.author, {
+            'attr': {'placeholder': "auteur",
+            },
+            'label': "Auteur"
+            }) 
+        }}
+
+        {{ form_row(formComment.content, {
+            'attr': {'placeholder': "saisir le contenu",
+            'rows': 5
+            },
+            'label': "Contenu commentaires"
+            })
+        }}
+
+        <button type="submit" class="btn btn-secondary mb-2">Poster le commentaire</button>
+
+        {{ form_end(formComment) }}
+
+        <div class="row bg-light mb-5">
+        
+            {# articleTwig.comment : retourne tout les commentaires associés à l'article (relation bi-drectionnelle / relations entre les tables) #}
+            {# plusieurs commentaires sont associés à l'article, donc nous sommes obligé de boucler FOR #}
+            {% for comment in articleTwig.comments %}
+
+            {# {{ dump(comment) }} #}
+
+            <div class="col-md-4 py-2">
+            
+                <span><strong>{{ comment.author }}</strong></span>
+                
+                <small class="font-italic">
+                    Posté le {{ comment.createdAt|date('d/m/y') }} à {{ comment.createdAt|date('H:i:s') }}
+                </small>
+            
+            </div>
+
+
+            <div class="col-md-8 py-2">
+            
+                {{ comment.content|striptags }}
+            
+            </div>
+            <hr class="col-md-10 bg-light">
+
+
+            {%  endfor %}
+
+        </div>
+
     </div>
 
 
