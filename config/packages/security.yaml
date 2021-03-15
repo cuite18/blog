@@ -1,7 +1,20 @@
 security:
+
+    # on definit un encoder on precise a symfony que nous allons utilisée un algorithm: bcrypt affin d'encoder un parametre dasn l'entité User donc dans la table User SQL
+    encoders:
+        App\Entity\User:
+            algorithm: bcrypt
+
     # https://symfony.com/doc/current/security.html#where-do-users-come-from-user-providers
     providers:
         users_in_memory: { memory: null }
+
+        in_database:
+            entity:
+                class: App\Entity\User
+                property: email
+
+
     firewalls:
         dev:
             pattern: ^/(_(profiler|wdt)|css|images|js)/
@@ -9,7 +22,20 @@ security:
         main:
             anonymous: true
             lazy: true
-            provider: users_in_memory
+
+            # Firewalls barriere de feu quel partie nous allons proteger et par quel moyent
+            # on précise a symfony que nous allons protéger le contenu principale de site pa rapport au provider "in_database" c'est a dire les donnée des utilisateur stocker en BDD
+            provider: in_database
+
+            #On precise a Symfony que la connexion s'établit sous formede formulairede connexion
+            form_login:
+                login_path: security_login # on precise la route sur laquelle est déclarer le formulaire de connexion
+                check_path: security_login # On precise a Symfony sur quelle touteil doit comparerles donnée en BDD avec les donnnée saisie dans le formuliare
+            
+            #pour se deconnecter symfony a seulement besoin de la route ,il se  deconnnectee automatiquement 
+            logout:
+                path: security_logout
+                target: blog
 
             # activate different ways to authenticate
             # https://symfony.com/doc/current/security.html#firewalls-authentication
