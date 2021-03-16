@@ -24,7 +24,7 @@ class Article
      * @ORM\Column(type="string", length=255)
      *  @Assert\Length(
      *      min = 2,
-     *      max = 50,
+     *      max = 60,
      *      minMessage = "Le titre est trop court",
      *      maxMessage = "Le titre est trop long"
      * )

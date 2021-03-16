@@ -39,19 +39,19 @@
 
                         {% if app.user %}
 
-                        <li class="nav-item">
-                            <a class="nav-link" href="">Mon Compte</a>
-                        </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="">Mon Compte</a>
+                            </li>
 
                         {% else %}
 
-                        <li class="nav-item">
-                            <a class="nav-link" href="{{ path('security_registration') }}">Créer un compte</a>
-                        </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="{{ path('security_registration') }}">Créer un compte</a>
+                            </li>
 
-                        <li class="nav-item">
-                            <a class="nav-link" href="{{ path('security_login') }}">Connexion</a>
-                        </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="{{ path('security_login') }}">Connexion</a>
+                            </li>
 
                         {% endif %}
 
@@ -62,11 +62,22 @@
                             <a class="nav-link" href="{{ path('blog_create') }}">Nouvelle Article</a>
                         </li>
 
+                        {# Si app.user retourne TRUE, cela veut dire que l'internaute est bien connecté, on lui propose un lien de deconnexion #}
                         {% if app.user %}
 
-                        <li class="nav-item">
-                            <a class="nav-link" href="{{ path('security_logout') }}">Déconnexion</a>
-                        </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="{{ path('security_logout') }}">Déconnexion</a>
+                            </li>
+
+                        {% endif %}
+
+                        {# Si l'utilisateur en BDD a un rôle garanti ROLE_ADMIN, on lui propose un lien pour accéder au BACKOFFICE #}
+                        {# is_granted() : fonction Twig #}
+                        {% if is_granted('ROLE_ADMIN') %}
+
+                            <li class="nav-item">
+                                <a class="nav-link" href="{{ path('admin') }}">Back Office</a>
+                            </li>
 
                         {% endif %}
 
@@ -81,7 +92,6 @@
                             </div>
                         </li>
                     </ul>
-
 
                     <form class="form-inline my-2 my-lg-0">
                         <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
