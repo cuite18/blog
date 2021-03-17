@@ -2,10 +2,12 @@
 
 namespace App\Entity;
 
-use App\Repository\CategoryRepository;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
+use App\Entity\Article;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
+use App\Repository\CategoryRepository;
+use Doctrine\Common\Collections\Collection;
+use Doctrine\Common\Collections\ArrayCollection;
 
 /**
  * @ORM\Entity(repositoryClass=CategoryRepository::class)
@@ -21,11 +23,21 @@ class Category
 
     /**
      * @ORM\Column(type="string", length=255)
+     * 
+     * @assert\notBlank(
+     *      message = "Merci de saisir le titre de la catégories",
+     *      groups={"category"}
+     * )
      */
     private $title;
 
     /**
      * @ORM\Column(type="text")
+     * 
+     * @assert\notBlank(
+     *      message = "Merci de saisir le titre de la description",
+     *      groups={"category"}
+     * )
      */
     private $description;
 

@@ -2,24 +2,70 @@
 
 {% block title%}
 
-    Catégories
+    BACKOFFICE | Gestion des articles
 
 {% endblock %}
 
 {% block body %}
 
-    <h1 class="display-4 text-center my-5">Catéories</h1>
+    <h1 class="display-4 text-center my-5">
+        Back_Office | Gestion des articles
+
+        
+    
+    
+    </h1>
+
+    {% for label, messages in app.flashes(['danger', 'success']) %}
+    
+        {% for oneMessage in messages %}
+
+            <div class="col-md-4 bg-{{ label }} p-4 rounded mx-auto text-center text-white mb-3">
+
+                {{ oneMessage }}
+
+            </div>
+
+        {% endfor %}
+
+    {% endfor %}
+
+    <p class="text-center">
+        <small><a href="{{ path('admin_new_category') }}" class="btn btn-secondary btn-sm">Nouvelle catégorie</a></small>
+    </p>
 
     <table class="table table-bordered text-center">
 
         <tr>
 
+            {% for oneColonne in colonnes %}
+
+                {% if oneColonne == 'titl' %}
+                    <th> Titre</th>
+                {% else %}
+                    <th>{{ oneColonne|upper }}</th>
+                {%  endif %}
+
+            {% endfor %}
+
+                <th>NB ARTICLE</th>
 
         </tr>
 
+        {% for oneCategory in categoryBdd %}
 
+            <tr>
+                <td>{{ oneCategory.id }}</td>
+                <td>{{ oneCategory.title }}</td>
+                <td>{{ oneCategory.description }}</td>
+                <td>{{ oneCategory.articles|length }}</td>
 
+                <td><a href="{{ path('admin_edit_category', {'id': oneCategory.id}) }}" class="btn btn-info"><i class="fa fa-edit"></i></a></td>
 
+                <td><a href="{{ path('admin_remove_category', {'id': oneCategory.id}) }}" class="btn btn-danger" onclick="return(confirm('voulez vous supprimer cet categorie ?'))"><i class="fas fa-trash-alt"></i></a></td>
+            </tr>
+
+        {% endfor %}
     </table>
 
 

@@ -1,0 +1,40 @@
+{% extends "base.html.twig" %}
+
+{% block title %}
+    BACKOFFICE | Gestion des Commentaire
+{% endblock %}
+
+{% block body %}
+
+    <h1 class="display-4 text-center my-5">BACKOFFICE | Gestion des Commentaire</h1>
+
+    <table class="table table-bordered text-center">
+        <tr>
+            {% for oneColonne in colonnes %}
+
+                {% if oneColonne == 'createdAd' %}
+                    <th>DATE</th>
+                {% elseif oneColonne == 'author'%}
+                    <th>auteur</th>
+                {% else %}
+                    <th>{{ oneColonne|upper }}</th>
+                {% endif %}
+                    
+            {% endfor %}
+        </tr>
+
+        {% for oneComment in commentsBdd %}
+            <tr>
+                <td>{{ oneComment.id }}</td>
+                <td>{{ oneComment.author }}</td>
+                <td>{{ oneComment.content|striptags }}</td>
+                <td>{{ oneComment.createdAt|date('d/m/y à h:i:s') }}</td>
+                <td>{{ oneComment.article.title }}</td>
+            </tr>
+
+
+        {% endfor %}
+
+    </table>
+
+{% endblock %}
